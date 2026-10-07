@@ -1,0 +1,7 @@
+/* Compiled Tailwind output placeholder.
+   This file is normally produced by the build step (see package.json).
+   For dev, the project loads Tailwind via CDN in each HTML head.
+   To build locally: npm install && npm run build */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";

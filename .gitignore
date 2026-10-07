@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build output (rebuilt via `npm run build` / `npm run watch`)
+# Keep the committed file so the CDN swap path works out-of-the-box.
+# Uncomment if you want a clean rebuild on every clone:
+# css/tailwind.css
+
+# Environment / secrets — AI provider keys should never be committed
+.env
+.env.*
+!.env.example
+config/ai-config.local.js
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# Local overrides
+dist/
+build/

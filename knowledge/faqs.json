@@ -1,0 +1,37 @@
+[
+  {
+    "id": "kb-001",
+    "category": "shipping",
+    "question": "Where is my order / tracking / delivery status",
+    "answer": "Your order has been shipped and is expected to arrive within 3-5 business days. You can track it using the tracking number sent to your email, or visit Account > Orders > Track.",
+    "keywords": ["order", "tracking", "where", "delivery", "shipped", "status", "package", "arrived"]
+  },
+  {
+    "id": "kb-002",
+    "category": "billing",
+    "question": "Refund policy / money back / cancel payment",
+    "answer": "We offer a 7-day refund policy on most items. To request a refund, go to Settings > Orders > Select Order > Request Refund. Refunds are processed within 5-7 business days to the original payment method.",
+    "keywords": ["refund", "money", "cancel", "payment", "return", "policy", "back", "chargeback"]
+  },
+  {
+    "id": "kb-003",
+    "category": "technical",
+    "question": "Password reset / login issue / account access",
+    "answer": "To reset your password, go to the login page and click 'Forgot Password'. You'll receive an email with a reset link valid for 24 hours. If you don't see the email, check your spam folder.",
+    "keywords": ["password", "login", "reset", "account", "access", "forgot", "signin", "locked"]
+  },
+  {
+    "id": "kb-004",
+    "category": "billing",
+    "question": "Invoice / bill / payment method / GST",
+    "answer": "You can download invoices from Settings > Billing > Invoices. We accept UPI, credit/debit cards (Visa, Mastercard, Amex), net banking, and wallets. For GST invoices, add your GSTIN in billing settings.",
+    "keywords": ["invoice", "bill", "payment", "method", "download", "gst", "tax", "receipt"]
+  },
+  {
+    "id": "kb-005",
+    "category": "general",
+    "question": "Business hours / contact / support team",
+    "answer": "Our AI support is available 24/7. For phone support, call us 9AM-6PM IST (Mon-Fri) at 1800-XXX-XXXX. Email: support@ticketdesk.io. Live chat is staffed 24/7 by humans as a fallback.",
+    "keywords": ["hours", "contact", "phone", "email", "support", "help", "reach", "call"]
+  }
+]

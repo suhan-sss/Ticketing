@@ -1,0 +1,5 @@
+/* Tailwind input — directives for the build step.
+   If using the CDN, this file isn't required. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

@@ -1,0 +1,357 @@
+/**
+ * Mock Data — single source of truth for the demo app.
+ * Replace api.js internals with real fetch() calls to swap to a backend.
+ */
+const MOCK = {
+  tags: [
+    { id: "billing",   label: "Billing",   color: "amber"   },
+    { id: "bug",       label: "Bug",       color: "red"     },
+    { id: "feature",   label: "Feature",   color: "indigo"  },
+    { id: "onboarding",label: "Onboarding",color: "teal"    },
+    { id: "urgent",    label: "Urgent",    color: "rose"    },
+    { id: "refund",    label: "Refund",    color: "orange"  },
+    { id: "login",     label: "Login",     color: "sky"     },
+    { id: "mobile",    label: "Mobile",    color: "violet"  },
+  ],
+
+  agents: [
+    { id: "a1", name: "Rahul Sharma",  email: "rahul@ticketdesk.io",  role: "agent", avatar: "agent-1.svg", workload: 6, maxLoad: 10, onLeave: false, team: "Support" },
+    { id: "a2", name: "Priya Mehta",   email: "priya@ticketdesk.io",  role: "agent", avatar: "agent-2.svg", workload: 4, maxLoad: 10, onLeave: false, team: "Support" },
+    { id: "a3", name: "Arjun Kapoor",   email: "arjun@ticketdesk.io",  role: "agent", avatar: "agent-3.svg", workload: 8, maxLoad: 10, onLeave: false, team: "Tier 2"  },
+    { id: "a4", name: "Sara Iyer",      email: "sara@ticketdesk.io",   role: "admin", avatar: "default.svg", workload: 3, maxLoad: 10, onLeave: true,  team: "Admin"   },
+    { id: "a5", name: "Vikram Singh",   email: "vikram@ticketdesk.io", role: "agent", avatar: "default.svg", workload: 5, maxLoad: 10, onLeave: false, team: "Tier 2"  },
+  ],
+
+  contacts: [
+    { id: "c1",  name: "Aman Verma",    email: "aman@example.com",     company: "Acme Corp",   phone: "+91 90000 11111" },
+    { id: "c2",  name: "Neha Joshi",    email: "neha@example.com",     company: "Globex",      phone: "+91 90000 22222" },
+    { id: "c3",  name: "Rohan Das",     email: "rohan@example.com",    company: "Initech",     phone: "+91 90000 33333" },
+    { id: "c4",  name: "Ishita Roy",    email: "ishita@example.com",   company: "Hooli",       phone: "+91 90000 44444" },
+    { id: "c5",  name: "Kunal Bhat",    email: "kunal@example.com",    company: "Pied Piper",  phone: "+91 90000 55555" },
+    { id: "c6",  name: "Pooja Nair",    email: "pooja@example.com",    company: "Stark Ind.",  phone: "+91 90000 66666" },
+    { id: "c7",  name: "Aditya Rao",    email: "aditya@example.com",   company: "Wayne Ent.",  phone: "+91 90000 77777" },
+    { id: "c8",  name: "Tanya Kapoor",  email: "tanya@example.com",    company: "Umbrella",    phone: "+91 90000 88888" },
+    { id: "c9",  name: "Manish Tiwari", email: "manish@example.com",   company: "Tyrell",      phone: "+91 90000 99999" },
+    { id: "c10", name: "Divya Saxena",  email: "divya@example.com",    company: "Soylent",     phone: "+91 90000 12121" },
+  ],
+
+  tickets: [
+    {
+      id: "TKT-1042", subject: "Cannot log in after password reset",
+      description: "I reset my password 2 hours ago but the new password isn't being accepted. The reset email confirmed the change was successful.",
+      status: "OPEN", priority: "HIGH", channel: "email",
+      tags: ["login", "bug"], contactId: "c1", assignedToId: "a1",
+      slaHours: 4, createdAt: "2026-09-22T08:30:00Z",
+      attachments: [{ name: "screenshot.png", size: 245000 }],
+      messages: [
+        { id: "m1", authorId: "c1", authorType: "customer", content: "Tried Chrome and Firefox, same issue. Cleared cache too.", createdAt: "2026-09-22T08:30:00Z" },
+        { id: "m2", authorId: "a1", authorType: "agent",    content: "Hi Aman — I can see the reset in our logs. Could you try the magic-link login once?", createdAt: "2026-09-22T08:45:00Z" },
+      ],
+      history: [
+        { id: "h1", action: "created", actorId: "c1", at: "2026-09-22T08:30:00Z" },
+        { id: "h2", action: "assigned", actorId: "system", from: null, to: "a1", at: "2026-09-22T08:31:00Z" },
+      ],
+    },
+    {
+      id: "TKT-1041", subject: "Refund request for duplicate charge",
+      description: "I was charged twice for the same monthly subscription on Sep 14.",
+      status: "IN_PROGRESS", priority: "MEDIUM", channel: "email",
+      tags: ["billing", "refund"], contactId: "c2", assignedToId: "a2",
+      slaHours: 8, createdAt: "2026-09-22T07:10:00Z",
+      attachments: [],
+      messages: [
+        { id: "m3", authorId: "c2", authorType: "customer", content: "Bank statement attached. Two charges of $49.", createdAt: "2026-09-22T07:10:00Z" },
+        { id: "m4", authorId: "a2", authorType: "agent",    content: "Confirmed duplicate. Refund queued — should reflect in 3-5 business days.", createdAt: "2026-09-22T07:40:00Z" },
+      ],
+      history: [
+        { id: "h3",  action: "created", actorId: "c2", at: "2026-09-22T07:10:00Z" },
+        { id: "h4",  action: "status",  actorId: "a2", from: "OPEN", to: "IN_PROGRESS", at: "2026-09-22T07:42:00Z" },
+        { id: "h4b", action: "note",    actorId: "ai-bot", at: "2026-09-22T07:11:00Z", note: "AI auto-classified as billing/refund and suggested priority MEDIUM." },
+      ],
+    },
+    {
+      id: "TKT-1040", subject: "Mobile app crashes on launch (iOS)",
+      description: "App opens and immediately closes. iPhone 13, iOS 17.",
+      status: "OPEN", priority: "URGENT", channel: "chat",
+      tags: ["bug", "mobile", "urgent", "ai-escalated"], contactId: "c3", assignedToId: "a3",
+      slaHours: 1, createdAt: "2026-09-22T09:00:00Z",
+      attachments: [{ name: "crash-log.txt", size: 12400 }],
+      aiMetadata: {
+        escalatedBy: "ai",
+        confidence: 0.42,
+        attempts: 2,
+        reason: "Customer expressed frustration; AI had no fix for iOS 17 crash",
+        suggestedReply: "Hi Rohan, thanks for the crash log. We've escalated to our mobile team and they will reach out within the hour.",
+        sentiment: "frustrated",
+        category: "bug",
+        at: "2026-09-22T09:00:00Z",
+      },
+      messages: [
+        { id: "m5", authorId: "c3", authorType: "customer", content: "Reinstalled twice. Still crashing.", createdAt: "2026-09-22T09:00:00Z" },
+      ],
+      history: [
+        { id: "h5", action: "created", actorId: "c3", at: "2026-09-22T09:00:00Z" },
+        { id: "h5b", action: "ai-escalated", actorId: "ai-bot", at: "2026-09-22T09:01:00Z" },
+      ],
+    },
+    {
+      id: "TKT-1039", subject: "Feature request: dark mode on dashboard",
+      description: "Would love a dark mode toggle for the web dashboard.",
+      status: "WAITING", priority: "LOW", channel: "webform",
+      tags: ["feature"], contactId: "c4", assignedToId: "a5",
+      slaHours: 24, createdAt: "2026-09-21T18:00:00Z",
+      attachments: [],
+      messages: [
+        { id: "m6", authorId: "c4", authorType: "customer", content: "Would be great for late-night work.", createdAt: "2026-09-21T18:00:00Z" },
+      ],
+      history: [{ id: "h6", action: "created", actorId: "c4", at: "2026-09-21T18:00:00Z" }],
+    },
+    {
+      id: "TKT-1038", subject: "Onboarding session for new team",
+      description: "Need a 1-hour walkthrough for our 6 new hires next week.",
+      status: "RESOLVED", priority: "MEDIUM", channel: "email",
+      tags: ["onboarding"], contactId: "c5", assignedToId: "a1",
+      slaHours: 8, createdAt: "2026-09-20T10:00:00Z",
+      attachments: [],
+      messages: [
+        { id: "m7", authorId: "a1", authorType: "agent", content: "Scheduled for Monday 10am. Calendar invite sent.", createdAt: "2026-09-20T11:00:00Z" },
+      ],
+      history: [
+        { id: "h7", action: "created", actorId: "c5", at: "2026-09-20T10:00:00Z" },
+        { id: "h8", action: "status", actorId: "a1", from: "OPEN", to: "RESOLVED", at: "2026-09-20T11:05:00Z" },
+      ],
+    },
+    {
+      id: "TKT-1037", subject: "Invoice missing tax ID",
+      description: "Invoice #INV-4421 missing our tax ID. Need corrected copy for compliance.",
+      status: "IN_PROGRESS", priority: "HIGH", channel: "email",
+      tags: ["billing"], contactId: "c6", assignedToId: "a2",
+      slaHours: 4, createdAt: "2026-09-22T06:00:00Z",
+      attachments: [],
+      messages: [
+        { id: "m8", authorId: "c6", authorType: "customer", content: "Please include GST 22AAAAA0000A1Z5.", createdAt: "2026-09-22T06:00:00Z" },
+      ],
+      history: [{ id: "h9", action: "created", actorId: "c6", at: "2026-09-22T06:00:00Z" }],
+    },
+    {
+      id: "TKT-1036", subject: "Export to CSV produces empty file",
+      description: "Clicking Export produces a 0-byte CSV. Happens for any filter.",
+      status: "OPEN", priority: "HIGH", channel: "webform",
+      tags: ["bug"], contactId: "c7", assignedToId: "a3",
+      slaHours: 4, createdAt: "2026-09-22T05:30:00Z",
+      attachments: [],
+      messages: [],
+      history: [{ id: "h10", action: "created", actorId: "c7", at: "2026-09-22T05:30:00Z" }],
+    },
+    {
+      id: "TKT-1035", subject: "Account upgrade not reflected in plan",
+      description: "Upgraded to Pro 2 days ago but UI still shows Starter.",
+      status: "CLOSED", priority: "MEDIUM", channel: "email",
+      tags: ["billing"], contactId: "c8", assignedToId: "a1",
+      slaHours: 8, createdAt: "2026-09-19T14:00:00Z",
+      attachments: [],
+      messages: [
+        { id: "m9", authorId: "a1", authorType: "agent", content: "Cache cleared on our end. Please hard refresh.", createdAt: "2026-09-19T15:00:00Z" },
+      ],
+      history: [
+        { id: "h11", action: "created", actorId: "c8", at: "2026-09-19T14:00:00Z" },
+        { id: "h12", action: "status", actorId: "a1", from: "IN_PROGRESS", to: "CLOSED", at: "2026-09-19T15:30:00Z" },
+      ],
+    },
+    {
+      id: "TKT-1034", subject: "Slack integration auth failing",
+      description: "OAuth handshake returns 500. Tried twice with workspace admin.",
+      status: "OPEN", priority: "MEDIUM", channel: "chat",
+      tags: ["bug"], contactId: "c9", assignedToId: "a5",
+      slaHours: 8, createdAt: "2026-09-22T04:00:00Z",
+      attachments: [],
+      messages: [],
+      history: [{ id: "h13", action: "created", actorId: "c9", at: "2026-09-22T04:00:00Z" }],
+    },
+    {
+      id: "TKT-1033", subject: "Webhook not firing on ticket creation",
+      description: "Configured webhook to https://hooks.example.com/tickets but no payloads arrive.",
+      status: "IN_PROGRESS", priority: "HIGH", channel: "webform",
+      tags: ["bug"], contactId: "c10", assignedToId: "a3",
+      slaHours: 4, createdAt: "2026-09-22T03:00:00Z",
+      attachments: [],
+      messages: [],
+      history: [{ id: "h14", action: "created", actorId: "c10", at: "2026-09-22T03:00:00Z" }],
+    },
+    {
+      id: "TKT-1032", subject: "Two-factor authentication setup",
+      description: "Need to enable 2FA for the admin account.",
+      status: "RESOLVED", priority: "LOW", channel: "phone",
+      tags: ["onboarding"], contactId: "c1", assignedToId: "a2",
+      slaHours: 24, createdAt: "2026-09-18T11:00:00Z",
+      attachments: [],
+      messages: [],
+      history: [
+        { id: "h15", action: "created", actorId: "c1", at: "2026-09-18T11:00:00Z" },
+        { id: "h16", action: "status", actorId: "a2", from: "OPEN", to: "RESOLVED", at: "2026-09-18T11:45:00Z" },
+      ],
+    },
+    {
+      id: "TKT-1031", subject: "Bulk import contacts failing",
+      description: "CSV with 500 contacts fails at row 47 with no clear error.",
+      status: "OPEN", priority: "URGENT", channel: "email",
+      tags: ["bug", "urgent"], contactId: "c3", assignedToId: "a3",
+      slaHours: 1, createdAt: "2026-09-22T09:30:00Z",
+      attachments: [{ name: "contacts.csv", size: 89000 }],
+      messages: [],
+      history: [{ id: "h17", action: "created", actorId: "c3", at: "2026-09-22T09:30:00Z" }],
+    },
+    {
+      id: "TKT-1030", subject: "Plan downgrade question",
+      description: "What happens to my data if I downgrade from Pro to Starter?",
+      status: "WAITING", priority: "LOW", channel: "email",
+      tags: ["billing"], contactId: "c4", assignedToId: "a1",
+      slaHours: 24, createdAt: "2026-09-21T12:00:00Z",
+      attachments: [],
+      messages: [],
+      history: [{ id: "h18", action: "created", actorId: "c4", at: "2026-09-21T12:00:00Z" }],
+    },
+    {
+      id: "TKT-1029", subject: "Email notifications not arriving",
+      description: "Not getting any email updates despite being subscribed.",
+      status: "IN_PROGRESS", priority: "MEDIUM", channel: "email",
+      tags: ["bug"], contactId: "c5", assignedToId: "a5",
+      slaHours: 8, createdAt: "2026-09-21T20:00:00Z",
+      attachments: [],
+      messages: [],
+      history: [{ id: "h19", action: "created", actorId: "c5", at: "2026-09-21T20:00:00Z" }],
+    },
+    {
+      id: "TKT-1028", subject: "Add custom field to ticket form",
+      description: "Need a 'Region' dropdown for our support workflow.",
+      status: "RESOLVED", priority: "LOW", channel: "webform",
+      tags: ["feature"], contactId: "c6", assignedToId: "a2",
+      slaHours: 24, createdAt: "2026-09-17T09:00:00Z",
+      attachments: [],
+      messages: [],
+      history: [
+        { id: "h20", action: "created", actorId: "c6", at: "2026-09-17T09:00:00Z" },
+        { id: "h21", action: "status", actorId: "a2", from: "OPEN", to: "RESOLVED", at: "2026-09-17T10:00:00Z" },
+      ],
+    },
+    {
+      id: "TKT-1027", subject: "Search returns wrong results",
+      description: "Searching for 'refund' returns tickets about refunds and 'refunding'.",
+      status: "OPEN", priority: "LOW", channel: "chat",
+      tags: ["bug"], contactId: "c7", assignedToId: "a1",
+      slaHours: 24, createdAt: "2026-09-21T15:00:00Z",
+      attachments: [],
+      messages: [],
+      history: [{ id: "h22", action: "created", actorId: "c7", at: "2026-09-21T15:00:00Z" }],
+    },
+    {
+      id: "TKT-1026", subject: "API rate limit questions",
+      description: "What are the rate limits for the v2 API? Need to plan our integration.",
+      status: "WAITING", priority: "MEDIUM", channel: "email",
+      tags: ["feature"], contactId: "c8", assignedToId: "a5",
+      slaHours: 8, createdAt: "2026-09-21T10:00:00Z",
+      attachments: [],
+      messages: [],
+      history: [{ id: "h23", action: "created", actorId: "c8", at: "2026-09-21T10:00:00Z" }],
+    },
+    {
+      id: "TKT-1025", subject: "Mobile push notifications silent on Android",
+      description: "No push on Android 14. iOS works fine.",
+      status: "OPEN", priority: "HIGH", channel: "phone",
+      tags: ["bug", "mobile"], contactId: "c9", assignedToId: "a3",
+      slaHours: 4, createdAt: "2026-09-22T07:45:00Z",
+      attachments: [],
+      messages: [],
+      history: [{ id: "h24", action: "created", actorId: "c9", at: "2026-09-22T07:45:00Z" }],
+    },
+    {
+      id: "TKT-1024", subject: "Custom branding on customer portal",
+      description: "Want our logo and colors on the support portal.",
+      status: "CLOSED", priority: "LOW", channel: "webform",
+      tags: ["feature"], contactId: "c10", assignedToId: "a2",
+      slaHours: 24, createdAt: "2026-09-15T08:00:00Z",
+      attachments: [],
+      messages: [],
+      history: [
+        { id: "h25", action: "created", actorId: "c10", at: "2026-09-15T08:00:00Z" },
+        { id: "h26", action: "status", actorId: "a2", from: "IN_PROGRESS", to: "CLOSED", at: "2026-09-16T08:00:00Z" },
+      ],
+    },
+    {
+      id: "TKT-1023", subject: "Holiday calendar sync failing",
+      description: "Google Calendar sync stopped working after update.",
+      status: "IN_PROGRESS", priority: "MEDIUM", channel: "email",
+      tags: ["bug"], contactId: "c2", assignedToId: "a5",
+      slaHours: 8, createdAt: "2026-09-21T22:00:00Z",
+      attachments: [],
+      messages: [],
+      history: [{ id: "h27", action: "created", actorId: "c2", at: "2026-09-21T22:00:00Z" }],
+    },
+  ],
+
+  rules: [
+    {
+      id: "r1", name: "Auto-assign urgent bugs to Tier 2",
+      enabled: true,
+      when: [
+        { field: "priority", operator: "equals",     value: "URGENT" },
+        { field: "tag",      operator: "contains",   value: "bug"    },
+      ],
+      then: [
+        { action: "assign",  value: "a3" },
+        { action: "tag",     value: "urgent" },
+        { action: "notify",  value: "team:tier2" },
+      ],
+    },
+    {
+      id: "r2", name: "Auto-tag billing tickets",
+      enabled: true,
+      when: [{ field: "channel", operator: "equals", value: "email" }],
+      then:  [{ action: "tag", value: "billing" }],
+    },
+    {
+      id: "r3", name: "Escalate waiting tickets after 48h",
+      enabled: false,
+      when: [
+        { field: "status",     operator: "equals",    value: "WAITING" },
+        { field: "hoursOpen",  operator: "greater",   value: "48"       },
+      ],
+      then: [{ action: "notify", value: "manager" }],
+    },
+    {
+      id: "r4", name: "Close resolved after 7 days",
+      enabled: true,
+      when: [
+        { field: "status", operator: "equals", value: "RESOLVED" },
+        { field: "hoursResolved", operator: "greater", value: "168" },
+      ],
+      then: [{ action: "setStatus", value: "CLOSED" }],
+    },
+  ],
+};
+
+// Helpers to access mock data
+const Data = {
+  getAgents:    () => MOCK.agents,
+  getAgent:     (id) => MOCK.agents.find(a => a.id === id),
+  getContacts:  () => MOCK.contacts,
+  getContact:   (id) => MOCK.contacts.find(c => c.id === id),
+  getTickets:   () => MOCK.tickets,
+  getTicket:    (id) => MOCK.tickets.find(t => t.id === id),
+  getRules:     () => MOCK.rules,
+  getTags:      () => MOCK.tags,
+  getTag:       (id) => MOCK.tags.find(t => t.id === id),
+  addTicket:    (t) => { MOCK.tickets.unshift(t); },
+  addContact:   (c) => { MOCK.contacts.unshift(c); return c; },
+  updateTicket: (id, patch) => {
+    const t = MOCK.tickets.find(x => x.id === id);
+    if (t) Object.assign(t, patch);
+    return t;
+  },
+  addRule:      (r) => { MOCK.rules.unshift(r); },
+  toggleRule:   (id) => {
+    const r = MOCK.rules.find(x => x.id === id);
+    if (r) r.enabled = !r.enabled;
+  },
+  deleteRule:   (id) => { MOCK.rules = MOCK.rules.filter(r => r.id !== id); },
+};

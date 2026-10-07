@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Ticket · TicketDesk</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { darkMode: 'class' };</script>
+  <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .priority-card.selected { box-shadow: 0 0 0 2px currentColor inset; }
+    .priority-card[data-priority="LOW"].selected    { background:#ecfdf5; border-color:#10b981; }
+    .priority-card[data-priority="MEDIUM"].selected { background:#fffbeb; border-color:#f59e0b; }
+    .priority-card[data-priority="HIGH"].selected   { background:#fff7ed; border-color:#f97316; }
+    .priority-card[data-priority="URGENT"].selected { background:#fff1f2; border-color:#f43f5e; }
+    .channel-radio.has-checked { background:#eef2ff; border-color:#6366f1; }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100">
+  <div class="flex min-h-screen">
+    <aside id="sidebar" class="w-[204px] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0"></aside>
+
+    <main class="flex-1 flex flex-col min-w-0">
+      <header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 sm:px-6 flex items-center gap-3">
+        <a href="index.html" class="text-sm text-slate-500 hover:text-slate-800 dark:hover:text-slate-200">← Back to Tickets</a>
+        <h1 class="font-semibold text-slate-800 dark:text-slate-100 ml-2">Create New Ticket</h1>
+        <div class="ml-auto">
+          <button id="btn-theme" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="flex-1 p-4 sm:p-6 max-w-4xl w-full mx-auto">
+        <form id="new-form" class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 space-y-6" novalidate>
+
+          <!-- SECTION 1: TICKET DETAILS -->
+          <section>
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Ticket Details</h2>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium required">Subject</label>
+                <input id="f-subject" type="text" maxlength="120" required
+                       placeholder="Brief summary of the issue"
+                       class="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <div class="flex justify-between mt-1">
+                  <p id="err-subject" class="text-xs text-rose-600 hidden"></p>
+                  <p class="text-xs text-slate-400 ml-auto"><span id="subject-count">0</span>/120</p>
+                </div>
+              </div>
+              <div>
+                <label class="block text-sm font-medium required">Description</label>
+                <textarea id="f-description" rows="5" required
+                          placeholder="Describe the issue in detail..."
+                          class="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"></textarea>
+                <div class="flex justify-between mt-1">
+                  <p id="err-description" class="text-xs text-rose-600 hidden"></p>
+                  <p class="text-xs text-slate-400 ml-auto"><span id="desc-count">0</span> chars · min 20</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION 2: CUSTOMER -->
+          <section>
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Customer</h2>
+            <label class="block text-sm font-medium required">Contact</label>
+            <div class="relative mt-1">
+              <input id="contact-search" type="text" autocomplete="off"
+                     placeholder="🔍 Search by name or email..."
+                     class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+              <div id="contact-results" class="hidden absolute z-20 w-full mt-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+            </div>
+
+            <div id="contact-selected" class="hidden mt-2 flex items-center gap-2 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-lg">
+              <div class="flex-1 min-w-0">
+                <div id="contact-display" class="text-sm font-medium text-slate-800 truncate"></div>
+                <div id="contact-display-email" class="text-xs text-slate-500 truncate"></div>
+              </div>
+              <button type="button" id="btn-clear-contact" class="text-xs text-rose-600 hover:underline shrink-0">Change</button>
+            </div>
+            <p id="err-contact" class="mt-1 text-xs text-rose-600 hidden"></p>
+
+            <div id="new-contact-form" class="hidden mt-3 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-lg space-y-2">
+              <div class="text-xs font-medium text-slate-600 dark:text-slate-400">Create new contact</div>
+              <input id="new-contact-name"    placeholder="Name"    class="w-full px-2 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">
+              <input id="new-contact-email"   type="email" placeholder="Email"   class="w-full px-2 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">
+              <input id="new-contact-company" placeholder="Company" class="w-full px-2 py-1.5 rounded border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm">
+              <button type="button" id="btn-save-contact" class="px-3 py-1.5 rounded bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium">Save Contact</button>
+            </div>
+          </section>
+
+          <!-- SECTION 3: CLASSIFICATION -->
+          <section>
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Classification</h2>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium required">Priority</label>
+                <div class="mt-1 grid grid-cols-2 md:grid-cols-4 gap-2" id="priority-cards">
+                  <button type="button" data-priority="LOW"    class="priority-card border-2 border-slate-200 dark:border-slate-700 rounded-lg p-3 text-center hover:border-emerald-500 transition">
+                    <div class="font-semibold text-emerald-700">Low</div>
+                    <div class="text-xs text-slate-500">24h SLA</div>
+                  </button>
+                  <button type="button" data-priority="MEDIUM" class="priority-card border-2 border-slate-200 dark:border-slate-700 rounded-lg p-3 text-center hover:border-amber-500 transition">
+                    <div class="font-semibold text-amber-700">Medium</div>
+                    <div class="text-xs text-slate-500">8h SLA</div>
+                  </button>
+                  <button type="button" data-priority="HIGH"   class="priority-card border-2 border-slate-200 dark:border-slate-700 rounded-lg p-3 text-center hover:border-orange-500 transition">
+                    <div class="font-semibold text-orange-700">High</div>
+                    <div class="text-xs text-slate-500">4h SLA</div>
+                  </button>
+                  <button type="button" data-priority="URGENT" class="priority-card border-2 border-slate-200 dark:border-slate-700 rounded-lg p-3 text-center hover:border-rose-500 transition">
+                    <div class="font-semibold text-rose-700">Urgent</div>
+                    <div class="text-xs text-slate-500">1h SLA</div>
+                  </button>
+                </div>
+                <input type="hidden" id="f-priority" value="MEDIUM">
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium required">Channel</label>
+                <div class="mt-1 flex flex-wrap gap-2">
+                  <label class="channel-radio flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 cursor-pointer transition">
+                    <input type="radio" name="channel" value="email" checked class="hidden">
+                    <span>✉️</span><span class="text-sm">Email</span>
+                  </label>
+                  <label class="channel-radio flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 cursor-pointer transition">
+                    <input type="radio" name="channel" value="chat" class="hidden">
+                    <span>💬</span><span class="text-sm">Chat</span>
+                  </label>
+                  <label class="channel-radio flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 cursor-pointer transition">
+                    <input type="radio" name="channel" value="phone" class="hidden">
+                    <span>📞</span><span class="text-sm">Phone</span>
+                  </label>
+                  <label class="channel-radio flex items-center gap-2 border border-slate-300 dark:border-slate-700 rounded-lg px-3 py-2 cursor-pointer transition">
+                    <input type="radio" name="channel" value="webform" class="hidden">
+                    <span>🌐</span><span class="text-sm">Web Form</span>
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium">Tags <span class="text-xs text-slate-500 font-normal">(max 5)</span></label>
+                <div id="tag-host" class="mt-1"></div>
+                <p id="err-tags" class="mt-1 text-xs text-rose-600 hidden"></p>
+              </div>
+            </div>
+          </section>
+
+          <!-- SECTION 4: ASSIGNMENT -->
+          <section>
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Assignment</h2>
+            <div class="space-y-3">
+              <div>
+                <label class="block text-sm font-medium">Assign To</label>
+                <div class="mt-1 flex flex-wrap gap-4">
+                  <label class="flex items-center gap-1.5 text-sm cursor-pointer">
+                    <input type="radio" name="assign-mode" value="unassigned" checked> Unassigned
+                  </label>
+                  <label class="flex items-center gap-1.5 text-sm cursor-pointer">
+                    <input type="radio" name="assign-mode" value="select"> Select Agent
+                  </label>
+                  <label class="flex items-center gap-1.5 text-sm cursor-pointer">
+                    <input type="radio" name="assign-mode" value="roundrobin"> Round Robin
+                  </label>
+                </div>
+              </div>
+
+              <div id="select-agent-block" class="hidden">
+                <div class="relative">
+                  <input id="agent-search" type="text" autocomplete="off"
+                         placeholder="🔍 Search agents… (least busy suggested first)"
+                         class="w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                  <div id="agent-results" class="hidden absolute z-20 w-full mt-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+                </div>
+                <div id="agent-selected" class="hidden mt-2 flex items-center gap-2 px-3 py-2 bg-emerald-50 border border-emerald-200 rounded-lg">
+                  <div class="flex-1 text-sm font-medium" id="agent-display"></div>
+                  <button type="button" id="btn-clear-agent" class="text-xs text-rose-600 hover:underline">Change</button>
+                </div>
+              </div>
+
+              <div id="roundrobin-block" class="hidden p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm">
+                Next in rotation: <strong id="roundrobin-next">—</strong>
+              </div>
+
+              <div>
+                <label class="block text-sm font-medium required">SLA (hours)</label>
+                <input id="f-sla" type="number" min="1" max="168" value="8"
+                       class="mt-1 w-full px-3 py-2 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500">
+                <p id="err-sla" class="mt-1 text-xs text-rose-600 hidden"></p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Urgent banner (shown conditionally) -->
+          <div id="urgent-warning" class="hidden p-3 bg-rose-50 border border-rose-200 rounded-lg flex items-center gap-2 text-sm text-rose-700">
+            <span>⚠️</span><span><strong>Urgent:</strong> SLA locked to 1 hour.</span>
+          </div>
+
+          <!-- SECTION 5: ATTACHMENTS -->
+          <section>
+            <h2 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Attachments</h2>
+            <label id="dropzone" for="f-files" class="dropzone block cursor-pointer">
+              <svg class="w-8 h-8 mx-auto text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66L9.41 17.41a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+              <p class="mt-2 text-sm">Drop files here or <span class="text-brand-600 font-medium">browse</span></p>
+              <p class="text-xs text-slate-400 mt-1">Max 5 files · 10MB each</p>
+              <input id="f-files" type="file" multiple class="hidden">
+            </label>
+            <ul id="files-list" class="mt-3 space-y-1"></ul>
+            <p id="err-files" class="mt-1 text-xs text-rose-600 hidden"></p>
+          </section>
+
+          <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-200 dark:border-slate-800">
+            <a href="index.html" class="px-4 py-2 rounded-lg text-sm font-medium border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800">Cancel</a>
+            <button type="submit" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white text-sm font-medium">Create Ticket</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="config/config.js"></script>
+  <script src="js/mock-data.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/toast.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/sidebar.js"></script>
+  <script src="js/components/badge.js"></script>
+  <script src="js/components/sla-indicator.js"></script>
+  <script src="js/components/agent-dropdown.js"></script>
+  <script src="js/components/tag-input.js"></script>
+  <script src="js/components/modal.js"></script>
+  <script src="js/components/timeline.js"></script>
+  <script src="js/components/condition-builder.js"></script>
+  <script src="js/templates/ticket-card.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/pages/new.js"></script>
+</body>
+</html>

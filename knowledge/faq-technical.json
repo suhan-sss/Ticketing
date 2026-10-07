@@ -1,0 +1,23 @@
+[
+  {
+    "id": "kb-006",
+    "category": "technical",
+    "question": "App crashes / not opening / freezes",
+    "answer": "Please try these steps: (1) Force close and reopen the app, (2) Restart your device, (3) Check for updates in the App Store / Play Store, (4) Reinstall the app. If the issue persists, share your device model and OS version with us.",
+    "keywords": ["crash", "crashing", "freeze", "frozen", "not opening", "won't open", "stuck", "hang"]
+  },
+  {
+    "id": "kb-007",
+    "category": "technical",
+    "question": "Two-factor authentication / 2FA / OTP not received",
+    "answer": "If your OTP isn't arriving: (1) Wait 60 seconds and tap 'Resend', (2) Check that your phone has signal, (3) Verify the phone number on file is correct, (4) Try SMS instead of authenticator app if available. OTPs are valid for 10 minutes.",
+    "keywords": ["2fa", "otp", "two-factor", "verification", "code", "authenticator", "sms"]
+  },
+  {
+    "id": "kb-008",
+    "category": "technical",
+    "question": "API integration / webhooks / developer docs",
+    "answer": "Our developer documentation is at docs.ticketdesk.io. You can find API references, webhook payloads, and SDKs (Node, Python, Go). For sandbox keys, visit the Developer Dashboard.",
+    "keywords": ["api", "webhook", "integration", "developer", "docs", "sdk", "sandbox", "endpoint"]
+  }
+]
